@@ -8,7 +8,7 @@ import (
 )
 
 // start field names with caps - this makes them get exproted to JSON later
-// make it serialisable-to-json
+// make it serialisable-to-json with the backticks
 type book struct {
 	ID       string `json:"id"`
 	Title    string `json:"title"`
@@ -16,15 +16,46 @@ type book struct {
 	Quantity int    `json:"quantity"`
 }
 
+type author struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
 // create a slice of books
 var test_books = []book{
 	{ID: "1", Title: "Man's search for meaning", Author: "Viktor Frankl", Quantity: 1},
-	{ID: "2", Title: "Archetypes", Author: "Jung", Quantity: 5},
+	{ID: "2", Title: "Another book", Author: "Viktor Frankl", Quantity: 3},
+	{ID: "3", Title: "Archetypes", Author: "Jung", Quantity: 5},
+}
+
+var authors = []author{
+	{ID: "1", Name: "Viktor Frankl"},
 }
 
 // GETTING
 func getBooks(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, test_books) // books slice will be serialised automatically
+}
+
+func getAuthors(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, authors)
+}
+
+func getBooksByAuthor(c *gin.Context) {
+	var result []book
+	name := c.Param("name")
+	for _, b := range test_books {
+		if b.Author == name {
+			result = append(result, b)
+		}
+	}
+
+	if len(result) == 0 {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "No books for author " + name})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, result)
 }
 
 // the function for our router
@@ -112,6 +143,8 @@ func main() {
 	router := gin.Default()
 	router.GET("/books", getBooks)
 	router.GET("/books/:id", bookById)
+	router.GET("/authors", getAuthors)
+	router.GET("/search/:name", getBooksByAuthor)
 
 	router.POST("/books", createBook)
 

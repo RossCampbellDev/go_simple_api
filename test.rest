@@ -21,3 +21,10 @@ PATCH http://localhost:8080/checkout?id=1
 
 ### checkin
 PATCH http://localhost:8080/checkin?id=1
+
+
+### authors
+GET http://localhost:8080/authors
+
+### books for author
+GET http://localhost:8080/search/Viktor%20Frankl
