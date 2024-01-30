@@ -1,2 +1,23 @@
 ### list all
 GET http://localhost:8080/books
+
+### create
+POST http://localhost:8080/books
+Content-Type: "application/json"
+
+{
+	"id": "3",
+	"title": "Hamlet",
+	"author": "Shakey",
+	"quantity": 5
+}
+
+### book by id
+GET http://localhost:8080/books/1
+
+
+### checkout
+PATCH http://localhost:8080/checkout?id=1
+
+### checkin
+PATCH http://localhost:8080/checkin?id=1
