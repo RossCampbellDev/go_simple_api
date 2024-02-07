@@ -7,7 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// start field names with caps - this makes them get exproted to JSON later
+/*
+	use gin.Context.JSON() rather than gin.Context.IndentedJSON()
+	JSON() sets the content-type of our resonse to "application/JSON"
+	IndentedJSON() is generally used for dev purposes - it uses up more CPU to format the JSON
+*/
+
+
+// start field names with caps - this makes them get exported to JSON later
 // make it serialisable-to-json with the backticks
 type book struct {
 	ID       string `json:"id"`
